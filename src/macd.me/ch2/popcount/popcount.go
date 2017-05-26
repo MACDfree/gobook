@@ -28,3 +28,14 @@ func PopCount25(x uint64) int {
 	}
 	return count
 }
+
+func PopCountByts(buf [32]byte) int {
+	count := 0
+	for _, x := range buf {
+		for ; x != 0; x = x & (x - 1) {
+			count++
+		}
+	}
+
+	return count
+}

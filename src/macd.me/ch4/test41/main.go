@@ -4,27 +4,21 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"os"
-	"strconv"
 
 	"macd.me/ch2/popcount"
 )
 
 func cmpDiff(a []byte, b []byte) int {
+	// 算出哈希值
 	c1 := sha256.Sum256(a)
 	c2 := sha256.Sum256(b)
-	fmt.Printf("%x , %x\n", c1, c2)
-	t1, err := strconv.ParseUint(fmt.Sprintf("%x", c1), 16, 64)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%v\n", err)
-		os.Exit(1)
+
+	// 计算两个字节数组的异或
+	var c3 [len(c1)]byte
+	for i := 0; i < len(c1); i++ {
+		c3[i] = c1[i] ^ c2[i]
 	}
-	t2, err := strconv.ParseUint(fmt.Sprintf("%x", c2), 16, 64)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%v\n", err)
-		os.Exit(1)
-	}
-	fmt.Printf("%x ^ %x = %x\n", t1, t2, t1^t2)
-	return popcount.PopCount(t1 ^ t2)
+	return popcount.PopCountByts(c3)
 }
 
 func main() {
