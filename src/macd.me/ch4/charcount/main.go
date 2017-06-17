@@ -18,6 +18,7 @@ func main() {
 
 	in := bufio.NewReader(os.Stdin)
 	for {
+		// 返回的
 		r, n, err := in.ReadRune()
 		if err == io.EOF {
 			break
